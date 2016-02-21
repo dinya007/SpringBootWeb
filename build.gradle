@@ -2,12 +2,23 @@ group 'WebSample'
 version '1.0-SNAPSHOT'
 
 apply plugin: 'java'
+apply plugin: 'com.bmuschko.cargo'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 repositories {
     mavenCentral()
+}
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'com.bmuschko:gradle-cargo-plugin:2.2.2'
+    }
 }
 
 dependencies {

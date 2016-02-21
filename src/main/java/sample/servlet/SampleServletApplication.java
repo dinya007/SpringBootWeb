@@ -38,7 +38,7 @@ public class SampleServletApplication extends SpringBootServletInitializer {
 			public void service(ServletRequest req, ServletResponse res)
 					throws ServletException, IOException {
 				res.setContentType("text/plain");
-				res.getWriter().ppend("Hello World");
+				res.getWriter().append("Hello World");
 			}
 		};
 	}

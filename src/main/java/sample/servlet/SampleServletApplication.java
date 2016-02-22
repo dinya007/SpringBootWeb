@@ -38,7 +38,7 @@ public class SampleServletApplication extends SpringBootServletInitializer {
 			public void service(ServletRequest req, ServletResponse res)
 					throws ServletException, IOException {
 				res.setContentType("text/plain");
-				res.getWriter().ppend("Hello World");
+				res.getWriter().append(getGreeter(true));
 			}
 		};
 	}
@@ -50,6 +50,10 @@ public class SampleServletApplication extends SpringBootServletInitializer {
 
 	public static void main(String[] args) throws Exception {
 		SpringApplication.run(SampleServletApplication.class, args);
+	}
+
+	public String getGreeter(boolean isGreat) {
+		return (isGreat) ? "Hello World" : "There is no greeter for you";
 	}
 
 }

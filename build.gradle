@@ -2,10 +2,17 @@ group 'WebSample'
 version '1.0-SNAPSHOT'
 
 apply plugin: 'java'
+apply plugin: 'war'
 apply plugin: 'com.bmuschko.cargo'
+
+
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
+
+ext {
+    env = System.getenv()
+}
 
 repositories {
     mavenCentral()
@@ -21,6 +28,27 @@ buildscript {
     }
 }
 
+cargo {
+    containerId = 'tomcat8x'
+
+    port = 8081
+
+//    deployable {
+//        context = name
+//    }
+
+    local {
+//        homeDir = file("$env.TOMCAT_HOME")
+        homeDir = file("/Users/denis/Documents/Java/MyJavaLibraries/apache-tomcat-8.0.26")
+//        log = file('build/tomcat.log')
+    }
+}
+
+task myTomcatRun(type: com.bmuschko.gradle.cargo.tasks.local.CargoRunLocal) {
+    containerId = 'tomcat8x'
+    homeDir = file("$env.TOMCAT_HOME")
+}
+
 dependencies {
 
     compile 'org.springframework.boot:spring-boot-starter:1.2.7.RELEASE'
@@ -29,5 +57,5 @@ dependencies {
     compile 'org.springframework.boot:spring-boot-starter-web:1.2.7.RELEASE'
 //    compile 'org.springframework.bootspring-boot-starter-test:1.2.7.RELEASE'
 
-    testCompile group: 'junit', name: 'junit', version: '4.11'
+    compile group: 'junit', name: 'junit', version: '4.11'
 }

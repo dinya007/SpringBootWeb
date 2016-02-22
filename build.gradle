@@ -3,8 +3,7 @@ version '1.0-SNAPSHOT'
 
 apply plugin: 'java'
 apply plugin: 'war'
-apply plugin: 'com.bmuschko.cargo'
-
+apply plugin: 'maven'
 
 
 sourceCompatibility = 1.8
@@ -28,31 +27,25 @@ buildscript {
     }
 }
 
-cargo {
-    containerId = 'tomcat8x'
-
-    port = 8081
-
-//    deployable {
-//        context = name
+//uploadArchives {
+//    repositories {
+//        mavenDeployer {
+//            repository(url: "http://localhost:8081/nexus/content/repositories/releases") {
+//                authentication(userName: 'admin', password: 'admin123')
+//            }
+//            snapshotRepository(url: "http://localhost:8081/nexus/content/repositories/snapshots") {
+//                authentication(userName: 'admin', password: 'admin123')
+//            }
+//            pom.version = "1.0-SNAPSHOT"
+//            pom.artifactId = "SpringBootWeb"
+//            pom.groupId = "ru.tisov.denis"
+//        }
 //    }
-
-    local {
-//        homeDir = file("$env.TOMCAT_HOME")
-        homeDir = file("/Users/denis/Documents/Java/MyJavaLibraries/apache-tomcat-8.0.26")
-//        log = file('build/tomcat.log')
-    }
-}
-
-task myTomcatRun(type: com.bmuschko.gradle.cargo.tasks.local.CargoRunLocal) {
-    containerId = 'tomcat8x'
-    homeDir = file("$env.TOMCAT_HOME")
-}
+//}
 
 dependencies {
 
     compile 'org.springframework.boot:spring-boot-starter:1.2.7.RELEASE'
-//	compile 'org.springframework.boot:spring-boot-starter-security:1.2.7.RELEASE'
     compile 'org.springframework.boot:spring-boot-starter-tomcat:1.2.7.RELEASE'
     compile 'org.springframework.boot:spring-boot-starter-web:1.2.7.RELEASE'
 //    compile 'org.springframework.bootspring-boot-starter-test:1.2.7.RELEASE'

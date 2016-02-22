@@ -27,21 +27,21 @@ buildscript {
     }
 }
 
-//uploadArchives {
-//    repositories {
-//        mavenDeployer {
-//            repository(url: "http://localhost:8081/nexus/content/repositories/releases") {
-//                authentication(userName: 'admin', password: 'admin123')
-//            }
-//            snapshotRepository(url: "http://localhost:8081/nexus/content/repositories/snapshots") {
-//                authentication(userName: 'admin', password: 'admin123')
-//            }
-//            pom.version = "1.0-SNAPSHOT"
-//            pom.artifactId = "SpringBootWeb"
-//            pom.groupId = "ru.tisov.denis"
-//        }
-//    }
-//}
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: "${nexusUrl}/content/repositories/releases") {
+                authentication(userName: nexusUser, password: nexusPassword)
+            }
+            snapshotRepository(url: "${nexusUrl}/content/repositories/snapshots") {
+                authentication(userName: nexusUser, password: nexusPassword)
+            }
+            pom.version = "1.0-SNAPSHOT"
+            pom.artifactId = "SpringBootWeb"
+            pom.groupId = "ru.tisov.denis"
+        }
+    }
+}
 
 dependencies {
 

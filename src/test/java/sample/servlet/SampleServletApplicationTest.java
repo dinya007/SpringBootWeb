@@ -10,6 +10,6 @@ public class SampleServletApplicationTest {
     @Test
     public void getGreeter() throws Exception {
         Assert.assertEquals("Hello World", sampleServletApplication.getGreeter(true));
-        Assert.assertEquals("There is no greeter for you", sampleServletApplication.getGreeter(true));
+        Assert.assertEquals("There is no greeter for you", sampleServletApplication.getGreeter(false));
     }
 }

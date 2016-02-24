@@ -33,7 +33,7 @@ buildscript {
 
 task buildDocker(type: Docker, dependsOn: build) {
     push = false
-    tag = "56016117/websampledocker"
+    tag = "denisandmax/websample"
     tagVersion = "latest"
     dockerfile = "${projectDir}/Dockerfile"
 

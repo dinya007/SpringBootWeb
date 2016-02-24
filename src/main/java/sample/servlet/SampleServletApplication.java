@@ -22,38 +22,43 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.*;
 import java.io.IOException;
 
 @Configuration
 @EnableAutoConfiguration
+@RestController
 public class SampleServletApplication extends SpringBootServletInitializer {
 
-	@SuppressWarnings("serial")
-	@Bean
-	public Servlet dispatcherServlet() {
-		return new GenericServlet() {
-			@Override
-			public void service(ServletRequest req, ServletResponse res)
-					throws ServletException, IOException {
-				res.setContentType("text/plain");
-				res.getWriter().append(getGreeter(true));
-			}
-		};
-	}
+    public static void main(String[] args) throws Exception {
+        SpringApplication.run(SampleServletApplication.class, args);
+    }
 
-	@Override
-	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-		return application.sources(SampleServletApplication.class);
-	}
+    @Bean
+    @SuppressWarnings("serial")
+    @RequestMapping("/greeting")
+    public Servlet dispatcherServlet() {
 
-	public static void main(String[] args) throws Exception {
-		SpringApplication.run(SampleServletApplication.class, args);
-	}
+        return new GenericServlet() {
+            @Override
+            public void service(ServletRequest req, ServletResponse res)
+                    throws ServletException, IOException {
+                res.setContentType("text/plain");
+                res.getWriter().append(getGreeter(true));
+            }
+        };
+    }
 
-	public String getGreeter(boolean isGreat) {
-		return (isGreat) ? "Hello World" : "There is no greeter for you";
-	}
+    @Override
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+        return application.sources(SampleServletApplication.class);
+    }
+
+    public String getGreeter(boolean isGreat) {
+        return (isGreat) ? "Hello World" : "There is no greeter for you";
+    }
 
 }

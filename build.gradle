@@ -4,6 +4,7 @@ version '1.0-SNAPSHOT'
 apply plugin: 'java'
 apply plugin: 'war'
 apply plugin: 'maven'
+apply plugin: 'docker'
 
 
 sourceCompatibility = 1.8
@@ -24,6 +25,23 @@ buildscript {
 
     dependencies {
         classpath 'com.bmuschko:gradle-cargo-plugin:2.2.2'
+        classpath('se.transmode.gradle:gradle-docker:1.2')
+    }
+}
+
+
+
+task buildDocker(type: Docker, dependsOn: build) {
+    push = false
+    tag = "56016117/websampledocker"
+    tagVersion = "latest"
+    dockerfile = "${projectDir}/Dockerfile"
+
+    doFirst {
+        copy {
+            from war
+            into stageDir
+        }
     }
 }
 
@@ -41,6 +59,10 @@ uploadArchives {
             pom.groupId = "ru.tisov.denis"
         }
     }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.8'
 }
 
 dependencies {

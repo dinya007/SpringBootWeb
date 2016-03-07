@@ -16,25 +16,36 @@
 
 package sample.servlet;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.*;
 import java.io.IOException;
+import java.util.Date;
+import java.util.Map;
 
 @Configuration
 @EnableAutoConfiguration
 @RestController
-public class SampleServletApplication extends SpringBootServletInitializer {
+@ComponentScan
+public class HelloWorldServlet extends SpringBootServletInitializer {
+
+    @Autowired
+    private GreetingService greetingService;
+
+    private final RestTemplate restTemplate = new RestTemplate();
 
     public static void main(String[] args) throws Exception {
-        SpringApplication.run(SampleServletApplication.class, args);
+        SpringApplication.run(HelloWorldServlet.class, args);
     }
 
     @Bean
@@ -47,18 +58,25 @@ public class SampleServletApplication extends SpringBootServletInitializer {
             public void service(ServletRequest req, ServletResponse res)
                     throws ServletException, IOException {
                 res.setContentType("text/plain");
-                res.getWriter().append(getGreeter(true));
+
+                res.getWriter().append(greetingService.getGreeting() + " Now: " + new Date());
+
+                for (Map.Entry<String, String> entry : System.getenv().entrySet()) {
+                    res.getWriter().append("\n" + entry.getKey() + " : " + entry.getValue());
+                }
             }
         };
     }
 
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-        return application.sources(SampleServletApplication.class);
+        return application.sources(HelloWorldServlet.class);
     }
 
     public String getGreeter(boolean isGreat) {
-        return (isGreat) ? "Hello World" : "There is no greeter for you";
+        String hello = restTemplate.getForObject("http://127.0.0.1:8082/hello", String.class);
+        String world = restTemplate.getForObject("http://127.0.0.1:8083/world", String.class);
+        return (isGreat) ? hello + " " + world + "!" : "There is no greeter for you";
     }
 
 }

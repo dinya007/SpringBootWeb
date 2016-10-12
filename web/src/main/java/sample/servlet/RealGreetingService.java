@@ -59,11 +59,11 @@ public class RealGreetingService implements GreetingService {
 
     }
 
-    public static void main(String[] args) throws DockerCertificateException, DockerException, InterruptedException, IOException {
-
-        new RealGreetingService().getGreeting();
-
-    }
+//    public static void main(String[] args) throws DockerCertificateException, DockerException, InterruptedException, IOException {
+//
+//        new RealGreetingService().getGreeting();
+//
+//    }
 
     public void registerService(){
         ConsulRegistryRequest request = new ConsulRegistryRequest(System.getenv("HOSTNAME"));

@@ -1,11 +1,22 @@
 group 'WebSample'
 version '1.0-SNAPSHOT'
 
-allprojects {
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.4.1.RELEASE")
+        classpath('se.transmode.gradle:gradle-docker:1.2')
+    }
+}
+
+subprojects {
     apply plugin: 'java'
-    apply plugin: 'war'
-    apply plugin: 'maven'
-//    apply plugin: 'docker'
+    apply plugin: 'idea'
+    apply plugin: 'spring-boot'
+    apply plugin: 'docker'
 
 
     sourceCompatibility = 1.8
@@ -19,62 +30,29 @@ allprojects {
         mavenCentral()
     }
 
-    buildscript {
-        repositories {
-            jcenter()
-        }
+    dependencies {
+        compile 'org.springframework.boot:spring-boot-starter-web:1.2.7.RELEASE'
+        compile 'com.spotify:docker-client:3.5.12'
+        compile 'com.github.docker-java:docker-java:3.0.0-RC3'
 
-        dependencies {
-            classpath 'com.bmuschko:gradle-cargo-plugin:2.2.2'
-            classpath('se.transmode.gradle:gradle-docker:1.2')
-        }
-    }
-
-
-
-//    task buildDocker(type: Docker, dependsOn: build) {
-//        push = false
-//        tag = "denisandmax/websample"
-//        tagVersion = "latest"
-//        dockerfile = "${projectDir}/Dockerfile"
-//
-//        doFirst {
-//            copy {
-//                from war
-//                into stageDir
-//            }
-//        }
-//    }
-
-    uploadArchives {
-        repositories {
-            mavenDeployer {
-                repository(url: "${nexusUrl}/content/repositories/releases") {
-                    authentication(userName: nexusUser, password: nexusPassword)
-                }
-                snapshotRepository(url: "${nexusUrl}/content/repositories/snapshots") {
-                    authentication(userName: nexusUser, password: nexusPassword)
-                }
-                pom.version = "1.0-SNAPSHOT"
-                pom.artifactId = "SpringBootWeb"
-                pom.groupId = "ru.tisov.denis"
-            }
-        }
+        compile group: 'junit', name: 'junit', version: '4.11'
     }
 
     task wrapper(type: Wrapper) {
         gradleVersion = '2.8'
     }
 
-    dependencies {
-
-        compile 'org.springframework.boot:spring-boot-starter:1.2.7.RELEASE'
-        compile 'org.springframework.boot:spring-boot-starter-tomcat:1.2.7.RELEASE'
-        compile 'org.springframework.boot:spring-boot-starter-web:1.2.7.RELEASE'
-        compile 'com.spotify:docker-client:3.5.12'
-        compile 'com.github.docker-java:docker-java:3.0.0-RC3'
-//    compile 'org.springframework.bootspring-boot-starter-test:1.2.7.RELEASE'
-
-        compile group: 'junit', name: 'junit', version: '4.11'
+    task buildDocker(type: Docker, dependsOn: build) {
+        push = true
+        applicationName = jar.baseName
+        dockerfile = file('src/main/docker/Dockerfile')
+        registry = 'localhost:5000'
+        doFirst {
+            copy {
+                from jar
+                into stageDir
+            }
+        }
     }
+
 }

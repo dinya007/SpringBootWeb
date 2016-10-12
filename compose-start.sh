@@ -105,4 +105,4 @@ openssl pkcs12 -export \
 
 #/etc/ssl/certs
 
-curl http://hello:8080/ --cert $DOCKER_CERT_PATH/cert.p12 --pass password --key $DOCKER_CERT_PATH/key.pem --cacert $DOCKER_CERT_PATH/ca.pem
+#curl http://hello:8080/ --cert $DOCKER_CERT_PATH/cert.p12 --pass password --key $DOCKER_CERT_PATH/key.pem --cacert $DOCKER_CERT_PATH/ca.pem

@@ -8,8 +8,8 @@ services:
     #        - node2:node2
         ports:
             - "80:80"
-#        networks:
-#            - my-net
+        networks:
+            - web-net
         restart: always
 
 
@@ -20,24 +20,26 @@ services:
 #            - world:world
         ports:
             - "8080"
-#        networks:
-#            - my-net
+        networks:
+            - web-net
+            - hello-net
+            - world-net
         restart: always
 #        hostname: web-node
-        environment:
-            - DOCKER_HOST
-            - DOCKER_OPTS="-H tcp://127.0.0.1:2375 -H unix:///var/run/docker.sock"
-            - DOCKER_TLS_VERIFY=1
-            - DOCKER_URL=unix:///var/run/docker.sock
-            - DOCKER_CERT_PATH=/etc/ssl/certs/
+#        environment:
+#            - DOCKER_HOST
+#            - DOCKER_OPTS="-H tcp://127.0.0.1:2375 -H unix:///var/run/docker.sock"
+#            - DOCKER_TLS_VERIFY=1
+#            - DOCKER_URL=unix:///var/run/docker.sock
+#            - DOCKER_CERT_PATH=/etc/ssl/certs/
 
 
     hello:
         build: hello/.
         ports:
             - "8080"
-#        networks:
-#            - my-net
+        networks:
+            - hello-net
         restart: always
 #        environment:
 #            - DOCKER_HOST
@@ -49,8 +51,8 @@ services:
         build: world/.
         ports:
             - "8080"
-#        networks:
-#            - my-net
+        networks:
+            - world-net
         restart: always
 #        environment:
 #            - DOCKER_HOST
@@ -61,7 +63,17 @@ services:
 #    my-net:
 #        driver: overlay
 
+#networks:
+#  default:
+#    external:
+#        name: web-net
+#        name: hello-net
+#        name: world-net
+
 networks:
-    default:
-        external:
-            name: my-net
+  web-net:
+    external: true
+  hello-net:
+    external: true
+  world-net:
+    external: true
